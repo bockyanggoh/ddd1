@@ -1,0 +1,34 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  jpa:
+    database: mysql
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/one_db
+    username: root
+    password: root
+  kafka:
+    bootstrap-servers: localhost:2181
+    consumer:
+      group-id: ${name}-${spring.config.activate.on-profile}
+axon:
+  axonserver:
+    enabled: false
+  serializer:
+    events: jackson
+  kafka:
+    client-id: ${name}-${spring.config.activate.on-profile}
+    default-topic: ${name}-event
+    bootstrap-servers: localhost:2181
+    producer:
+      retries: 0
+    consumer:
+      group-id: ${name}-${spring.config.activate.on-profile}
+    properties:
+      security.protocol: PLAINTEXT
