@@ -53,7 +53,7 @@ public class RunControllerIntegrationTests {
         var result = controller.idempotentUpdateRunApi(new CreateRunRequest(randomName));
         Assert.assertTrue(result.getStatusCode().is2xxSuccessful());
         log.info(result.getBody().getId());
-        Thread.sleep(1000);
+        Thread.sleep(100);
         var retrieved = repository.findRunCycleEntityByRunAggregateId(result.getBody().getId());
         Assert.assertTrue(retrieved.isPresent());
         Assert.assertEquals(result.getBody().getId(), retrieved.get().getRunAggregateId());
