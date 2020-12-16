@@ -8,6 +8,7 @@ import com.ddd.one.domain.aggregate.run.event.RunCreatedEvent;
 import com.ddd.one.domain.aggregate.run.event.RunExpiredEvent;
 import com.ddd.one.domain.aggregate.run.event.RunLogAddedEvent;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -17,11 +18,13 @@ import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.context.LifecycleProcessor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
+@EqualsAndHashCode(callSuper = true)
 @Aggregate
 @Data
 @NoArgsConstructor
@@ -53,6 +56,7 @@ public class RunAggregate extends BaseAggregate {
     private void on(RunCreatedEvent event) {
         this.runId = event.getRunId();
         this.runName = event.getRunName();
+        this.runLogs = new ArrayList<>();
         this.runLogs.add(new RunLogAM(UUID.randomUUID().toString(), "CREATE", "DEFAULT EVENT"));
     }
 

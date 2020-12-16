@@ -1,5 +1,6 @@
 package com.ddd.one.domain.projections;
 
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.ddd.one.domain.aggregate.run.event.RunCreatedEvent;
 import com.ddd.one.domain.aggregate.run.event.RunLogAddedEvent;
 import com.ddd.one.infrastructure.database.model.RunCycleEntity;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
+@XRayEnabled
 public class RunProjection {
     private RunCycleRepository repository;
 
@@ -21,7 +23,7 @@ public class RunProjection {
     }
 
     @EventHandler
-    private void handle(RunLogAddedEvent event) {
+    private void handle(RunLogAddedEvent event) throws InterruptedException {
         var retrieved = repository.findRunCycleEntityByRunAggregateId(event.getRunId());
         if(retrieved.isPresent()) {
             var entity = retrieved.get();
@@ -29,5 +31,4 @@ public class RunProjection {
             entity.addRunLog(runLogEntity);
         }
     }
-
 }
